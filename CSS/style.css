@@ -1,0 +1,8 @@
+body{
+    color :blue
+}
+
+* {
+    border: 4px;
+    border-color: red;
+}
