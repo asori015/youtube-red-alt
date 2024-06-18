@@ -7,8 +7,8 @@
 //     $('input.url').val('').focus() // clear text field
 // })
 
-function embedPlaylist() {
-    const playlistUrl = document.getElementById('playlistUrl').value;
+function embedYouTube() {
+    const playlistUrl = document.getElementById('youtubeUrl').value;
     const embedContainer = document.getElementById('embedContainer');
 
     // Extract the playlist ID from the URL
