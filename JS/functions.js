@@ -1,46 +1,35 @@
 var tag = document.createElement('script');
-  tag.id = 'iframe-demo';
-  tag.src = 'https://www.youtube.com/iframe_api';
-  var firstScriptTag = document.getElementsByTagName('script')[0];
-  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+tag.id = 'iframe-demo';
+tag.src = 'https://www.youtube.com/iframe_api';
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-  var player;
-  function onYouTubeIframeAPIReady() {
+var player;
+
+function onYouTubeIframeAPIReady() {
     // player = new YT.Player('existing-iframe-example', {
     //     events: {
     //       'onReady': onPlayerReady,
     //       'onStateChange': onPlayerStateChange
     //     }
     // });
-  }
-  function onPlayerReady(event) {
-    document.getElementById('embedIFrame').style.borderColor = '#FF6D00';
-  }
+}
 
-  function changeBorderColor(playerStatus) {
-    var color;
-    if (playerStatus == -1) {
-      color = "#37474F"; // unstarted = gray
-    } else if (playerStatus == 0) {
-      color = "#FFFF00"; // ended = yellow
-    } else if (playerStatus == 1) {
-      color = "#33691E"; // playing = green
-    } else if (playerStatus == 2) {
-      color = "#DD2C00"; // paused = red
-    } else if (playerStatus == 3) {
-      color = "#AA00FF"; // buffering = purple
-    } else if (playerStatus == 5) {
-      color = "#FF6DOO"; // video cued = orange
-    }
-    if (color) {
-      document.getElementById('embedIFrame').style.borderColor = color;
-    }
-  }
-  function onPlayerStateChange(event) {
-    changeBorderColor(event.data);
-  }
+function onPlayerReady(event) {
+    event.target.playVideo();
+    setupMediaSession();
+}
 
-  function embedYouTube() {
+function onPlayerStateChange(event) {
+    if (event.data == YT.PlayerState.PLAYING) {
+        navigator.mediaSession.playbackState = "playing";
+    } 
+    else {
+        navigator.mediaSession.playbackState = "paused";
+    }
+}
+
+function embedYouTube() {
     const playlistUrl = document.getElementById('youtubeUrl').value;
     const embedContainer = document.getElementById('embedContainer');
 
@@ -83,5 +72,41 @@ var tag = document.createElement('script');
     }
     else {
         embedContainer.innerHTML = '<p>Please enter a valid YouTube video or playlist URL.</p>';
+    }
+}
+
+function setupMediaSession() {
+    if ('mediaSession' in navigator) {
+        // navigator.mediaSession.metadata = new MediaMetadata({
+        //     title: 'Video Title', // Replace with your video title
+        //     artist: 'Artist Name', // Replace with artist name or channel name
+        //     album: 'Album Name', // Replace with album name if applicable
+        //     artwork: [
+        //         { src: 'path-to-your-album-art.jpg', sizes: '96x96', type: 'image/jpeg' }
+        //     ]
+        // });
+
+        navigator.mediaSession.setActionHandler('play', function() {
+            player.playVideo();
+            navigator.mediaSession.playbackState = "playing";
+        });
+
+        navigator.mediaSession.setActionHandler('pause', function() {
+            player.pauseVideo();
+            navigator.mediaSession.playbackState = "paused";
+        });
+
+        navigator.mediaSession.setActionHandler('seekbackward', function() {
+            player.seekTo(player.getCurrentTime() - 10);
+        });
+
+        navigator.mediaSession.setActionHandler('seekforward', function() {
+            player.seekTo(player.getCurrentTime() + 10);
+        });
+
+        navigator.mediaSession.setActionHandler('stop', function() {
+            player.stopVideo();
+            navigator.mediaSession.playbackState = "none";
+        });
     }
 }
