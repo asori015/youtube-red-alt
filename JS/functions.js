@@ -34,9 +34,14 @@ function embedYouTube() {
     const embedContainer = document.getElementById('embedContainer');
 
     // Extract the playlist ID from the URL
-    const urlParams = new URLSearchParams(new URL(playlistUrl).search);
-    const videoID = urlParams.get("v")
-    const playlistID = urlParams.get('list');
+    // const urlParams = new URLSearchParams(new URL(playlistUrl).search);
+    // const videoID = urlParams.get("v")
+    // const playlistID = urlParams.get('list');
+
+    const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/|playlist\?list=)|youtu\.be\/)([a-zA-Z0-9_-]{11})(?:.*list=([a-zA-Z0-9_-]+))?/;
+    const match = playlistUrl.match(youtubeRegex);
+    const videoID = match[1];
+    const playlistID = match[2];
 
     if (playlistID) {
         const embedHtml = `
