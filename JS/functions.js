@@ -1,24 +1,3 @@
-//const { initializeApp } = require('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');
-//const { getAnalytics } = require('https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js');
-// const { getAnalytics } = require('https://www.gstatic.com/firebasejs/10.12.2/firebase.js');
-
-// Firebase configuration
-// const firebaseConfig = {
-//     apiKey: "AIzaSyA1itj36mAktkH77QP3v0Eia-TvOM0p0-s",
-//     authDomain: "music-db-3ba1b.firebaseapp.com",
-//     projectId: "music-db-3ba1b",
-//     storageBucket: "music-db-3ba1b.appspot.com",
-//     messagingSenderId: "768212569629",
-//     appId: "1:768212569629:web:296e08aa566a41fec640f4",
-//     measurementId: "G-69KPW9VFRZ"
-// };
-
-// // Initialize Firebase
-// const app = initializeApp(firebaseConfig);
-// const db = app.firestore();
-
-// import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-
 var tag = document.createElement('script');
 tag.id = 'iframe-demo';
 tag.src = 'https://www.youtube.com/iframe_api';
@@ -66,7 +45,7 @@ function embedYouTube() {
     videoID = match[1];
     playlistID = match[2];
 
-    if (playlistID | videoID) {
+    if (playlistID || videoID) {
         const embedHtml = `
             <iframe id='embedIFrame' width="560" height="315"
                 src="https://www.youtube.com/embed/${videoID}?enablejsapi=1"
