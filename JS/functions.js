@@ -41,9 +41,9 @@ function onYouTubeIframeAPIReady() {
 function onPlayerReady(event) {
     console.log('Player ready')
     if(playlistID){
-        player.loadPlaylist(playlistID, 0, 0);
+        event.target.cuePlaylist({listType: "playlist", list: playlistID, index: 0, startSeconds: 0});
     }
-    event.target.playVideo();
+    //event.target.playVideoAt(0);
     setupMediaSession();
 }
 
@@ -61,40 +61,12 @@ function embedYouTube() {
     const embedContainer = document.getElementById('embedContainer');
 
     // Extract the playlist ID from the URL
-    // const urlParams = new URLSearchParams(new URL(playlistUrl).search);
-    // const videoID = urlParams.get("v")
-    // const playlistID = urlParams.get('list');
-
     const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/|playlist\?list=)|youtu\.be\/)([a-zA-Z0-9_-]{11})(?:.*list=([a-zA-Z0-9_-]+))?/;
     const match = playlistUrl.match(youtubeRegex);
     videoID = match[1];
     playlistID = match[2];
 
-    if (playlistID) {
-        // const embedHtml = `
-        //     <iframe id='embedIFrame' width="560" height="315"
-        //         src="https://www.youtube.com/embed?listType=playlist&list=${playlistID}"
-        //         frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        //         allowfullscreen>
-        //     </iframe>`;
-        // embedContainer.innerHTML = embedHtml;
-        
-        const embedHtml = `
-            <iframe id='embedIFrame' width="560" height="315"
-                src="https://www.youtube.com/embed/${videoID}?enablejsapi=1"
-                frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen>
-            </iframe>`;
-        embedContainer.innerHTML = embedHtml;
-
-        player = new YT.Player('embedIFrame', {
-            events: {
-              'onReady': onPlayerReady,
-              'onStateChange': onPlayerStateChange
-            }
-        });
-    }
-    else if(videoID){
+    if (playlistID | videoID) {
         const embedHtml = `
             <iframe id='embedIFrame' width="560" height="315"
                 src="https://www.youtube.com/embed/${videoID}?enablejsapi=1"
